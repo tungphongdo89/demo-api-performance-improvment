@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sonarqube-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456  # for root user
+      MYSQL_DATABASE: sonarqube_db
+      MYSQL_USER: tungphongdo
+      MYSQL_PASSWORD: tungtung
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: sonarqube-server
+    restart: always
+    environment:
+      SONARQUBE_JDBC_URL: jdbc:mysql://mysql:3306/sonarqube?useSSL=false
+      SONARQUBE_JDBC_USERNAME: sonar_test
+      SONARQUBE_JDBC_PASSWORD: 123456
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mysql
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+volumes:
+  mysql_data:
+  sonarqube_data:
+  sonarqube_logs:
+  sonarqube_extensions:

@@ -1,0 +1,54 @@
+server:
+  port: 8060
+
+spring:
+  application:
+    name: demo-api-performance-improvement
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/api_performance_db
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5  #Ensures a minimum number of idle connections are available for use.
+      maximum-pool-size: 20 #Limits the total number of connections in the pool.
+      idle-timeout: 30000 #Determines how long an idle connection is kept before it can be removed.
+      max-lifetime: 1200000 #Specifies the maximum time a connection can live in the pool before being replaced.
+      connection-timeout: 20000 #Defines how long to wait for a connection before timing out.
+      pool-name: HikariCP
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  cache:
+    type: redis
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    username: ${REDIS_USERNAME:}
+    password: ${REDIS_PASSWORD:}
+    timeout: ${REDIS_TIMEOUT:60000ms}
+
+  # Config for Gzip payload compression
+  servlet:
+    compress:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/css,text/javascript,text/xml,text/plain
+      min-response-size: 1024
+
+logging:
+  level:
+    root: info
+  async:
+    enabled: true
+    queueSize: 512  # controls how many log messages are kept in memory before they are processed
+    discardThreshold: 0 # determines when messages should be discarded (0 means never discard).
+#  file:
+#    name: logs/spring-boot-application.log

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Console output configuration -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling file appender to generate log files with a date in the file name -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- No need to set 'file' element directly, let 'TimeBasedRollingPolicy' handle the file naming -->
+
+        <!-- Define the rolling policy based on date -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- This is where the log file's name will include the date -->
+            <fileNamePattern>logs/api-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Optional: Keep history for 30 days -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <!-- Define how to encode the logs -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger configuration -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
